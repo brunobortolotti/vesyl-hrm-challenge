@@ -2,55 +2,47 @@
 namespace :db do
   desc 'Ingest Users'
   task :ingest_users => :environment do
-    process_batches(file: 'tmp/storage/users.csv', batch_size: 1000, thread_limit: 10) do |index, user_chunk|
+    process_batches(file: 'tmp/storage/users.csv', batch_size: 1000, thread_limit: 10) do |index, chunk|
       puts "Starting batch ##{index}"
-      result = create_users(user_chunk)
+      result = create_users(chunk)
       puts "Batch ##{index} finished. (#{result[:success_count]}) successes and (#{result[:failure_count]}) failures"
     end
   end
 
   desc 'Ingest Sessions'
   task :ingest_sessions => :environment do
-    process_batches(file: 'tmp/storage/hrm_sessions.csv', batch_size: 1000, thread_limit: 10) do |index, session_chunk|
+    process_batches(file: 'tmp/storage/hrm_sessions.csv', batch_size: 1000, thread_limit: 10) do |index, chunk|
       puts "Starting batch ##{index}"
-      result = create_sessions(session_chunk)
+      result = create_sessions(chunk)
       puts "Batch ##{index} finished. (#{result[:success_count]}) successes and (#{result[:failure_count]}) failures"
     end
   end
 
   desc 'Ingest Data Points'
   task :ingest_data_points => :environment do
-    queue = []
-
-    Thread.new do
-      index = 0
-      CSV.open('tmp/storage/hrm_data_points.csv', headers: true).lazy.each_slice(1000) do |rows|
-        queue << [index, rows]
-        index = index + 1
-      end
-    end
-
-    Parallel.map(Proc.new { queue.shift }, in_processes: 10) do |batch|
-      if batch.blank?
-        sleep(1)
-        next
-      end
-
-      puts "Starting batch ##{batch.first}"
-      result = create_data_points(batch.last)
-      puts "Batch ##{batch.first} finished with (#{result[:success_count]}) successes" \
-            " and (#{result[:failure_count]}) failures"
+    process_batches(file: 'tmp/storage/hrm_data_points.csv', batch_size: 1000, thread_limit: 10) do |index, chunk|
+      puts "Starting batch ##{index}"
+      result = create_data_points(chunk)
+      puts "Batch ##{index} finished. (#{result[:success_count]}) successes and (#{result[:failure_count]}) failures"
     end
   end
 
   desc 'Wipe Users, Sessions and Data Points'
-  task :wipe_data => :environment do
-    puts 'Wiping Data Points'
-    # DataPoint.where.not(session_id: nil).destroy_all
-    puts 'Wiping Sessions'
-    # Session.destroy_all
+  task :wipe_users => :environment do
     puts 'Wiping users'
-    # User.destroy_all
+    User.delete_all
+  end
+
+  desc 'Wipe Sessions'
+  task :wipe_sessions => :environment do
+    puts 'Wiping Sessions'
+    Session.delete_all
+  end
+
+  desc 'Wipe Data Points'
+  task :wipe_data_points => :environment do
+    puts 'Wiping Data Points'
+    DataPoint.delete_all
   end
 
   def process_batches(file:, batch_size: 1000, thread_limit: 10)
@@ -62,10 +54,16 @@ namespace :db do
         queue << [index, rows]
         index = index + 1
       end
+      queue << -1
     end
 
     Parallel.map(Proc.new { queue.shift }, in_processes: thread_limit) do |batch|
-      raise Parallel::Break if batch.blank?
+      raise Parallel::Break if batch == -1
+
+      if batch.blank?
+        sleep 1
+        next
+      end
 
       yield(batch.first, batch.last) if block_given?
     end

@@ -12,6 +12,9 @@ gem "redis", "~> 4.0"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 gem 'csv', '~> 3.3', '>= 3.3.3'
+gem 'smarter_csv', '~> 1.13', '>= 1.13.1'
+gem 'parallel', '~> 1.26', '>= 1.26.3'
+gem 'progress_bar', '~> 1.3', '>= 1.3.4'
 
 # Use Sass to process CSS
 # gem "sassc-rails"

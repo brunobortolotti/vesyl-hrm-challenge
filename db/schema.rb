@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_06_160832) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_06_171009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "data_points", id: false, force: :cascade do |t|
+    t.bigint "session_id", null: false
+    t.integer "beats_per_minute", null: false
+    t.datetime "reading_started_at", null: false
+    t.datetime "reading_ended_at", null: false
+    t.integer "duration_in_seconds", null: false
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "duration_in_seconds", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
@@ -28,4 +43,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_06_160832) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "data_points", "sessions"
+  add_foreign_key "sessions", "users"
 end

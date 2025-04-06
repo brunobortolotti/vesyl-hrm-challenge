@@ -80,13 +80,14 @@ namespace :db do
         gender: user_row['Gender'],
         age: user_row['Age'],
         created_at: user_row['Created At'],
-        updated_at: user_row['Created At'],
         hr_zone1_bpm_min: user_row['HR Zone1 BPM Min'],
         hr_zone1_bpm_max: user_row['HR Zone1 BPM Max'],
         hr_zone2_bpm_min: user_row['HR Zone2 BPM Min'],
         hr_zone2_bpm_max: user_row['HR Zone2 BPM Max'],
         hr_zone3_bpm_min: user_row['HR Zone3 BPM Min'],
-        hr_zone3_bpm_max: user_row['HR Zone2 BPM Max']
+        hr_zone3_bpm_max: user_row['HR Zone3 BPM Max'],
+        hr_zone4_bpm_min: user_row['HR Zone4 BPM Min'],
+        hr_zone4_bpm_max: user_row['HR Zone4 BPM Max']
 
       user.save ? success_count += 1 : failure_count += 1
     end
@@ -103,8 +104,7 @@ namespace :db do
         id: session_row['Session ID'],
         user_id: session_row['User Id'],
         duration_in_seconds: session_row['Duration in Secs'],
-        created_at: session_row['Created At'],
-        updated_at: session_row['Created At']
+        created_at: session_row['Created At']
 
       session.save ? success_count += 1 : failure_count += 1
     end

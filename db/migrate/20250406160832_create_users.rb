@@ -10,8 +10,9 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.integer :hr_zone2_bpm_max, null: false
       t.integer :hr_zone3_bpm_min, null: false
       t.integer :hr_zone3_bpm_max, null: false
-
-      t.timestamps
+      t.integer :hr_zone4_bpm_min, null: false
+      t.integer :hr_zone4_bpm_max, null: false
+      t.datetime :created_at, null: false
     end
   end
 end

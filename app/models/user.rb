@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  has_many :sessions
-  has_many :data_points, through: :sessions
+  has_many :hrm_sessions
+  has_many :hrm_data_points, through: :hrm_sessions
 
   validates :username, presence: true
   validates :gender, presence: true

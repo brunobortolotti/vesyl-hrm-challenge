@@ -14,15 +14,15 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_06_171009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "data_points", id: false, force: :cascade do |t|
-    t.bigint "session_id", null: false
+  create_table "hrm_data_points", id: false, force: :cascade do |t|
+    t.bigint "hrm_session_id", null: false
     t.integer "beats_per_minute", null: false
     t.datetime "reading_started_at", null: false
     t.datetime "reading_ended_at", null: false
     t.integer "duration_in_seconds", null: false
   end
 
-  create_table "sessions", force: :cascade do |t|
+  create_table "hrm_sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "duration_in_seconds", null: false
     t.datetime "created_at", null: false
@@ -43,6 +43,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_06_171009) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "data_points", "sessions"
-  add_foreign_key "sessions", "users"
+  add_foreign_key "hrm_data_points", "hrm_sessions"
+  add_foreign_key "hrm_sessions", "users"
 end

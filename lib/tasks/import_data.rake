@@ -36,13 +36,13 @@ namespace :db do
   desc 'Wipe Sessions'
   task :wipe_sessions => :environment do
     puts 'Wiping Sessions'
-    Session.delete_all
+    HrmSession.delete_all
   end
 
   desc 'Wipe Data Points'
   task :wipe_data_points => :environment do
     puts 'Wiping Data Points'
-    DataPoint.delete_all
+    HrmDataPoint.delete_all
   end
 
   def process_batches(file:, batch_size: 1000, thread_limit: 10)
@@ -99,7 +99,7 @@ namespace :db do
 
     success_count = failure_count = 0
     sessions_chunk.each do |session_row|
-      session = Session.new \
+      session = HrmSession.new \
         id: session_row['Session ID'],
         user_id: session_row['User Id'],
         duration_in_seconds: session_row['Duration in Secs'],
@@ -117,8 +117,8 @@ namespace :db do
 
     success_count = failure_count = 0
     data_points_chunk.each do |data_point_row|
-      data_point = DataPoint.new \
-        session_id: data_point_row['Session ID'],
+      data_point = HrmDataPoint.new \
+        hrm_session_id: data_point_row['Session ID'],
         beats_per_minute: data_point_row['Beats Per Minute'],
         duration_in_seconds: data_point_row['Duration in Secs'],
         reading_started_at: data_point_row['Reading Start Time'],

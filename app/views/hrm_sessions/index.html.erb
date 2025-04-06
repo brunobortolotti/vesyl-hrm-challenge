@@ -2,12 +2,15 @@
 
 <h1>Hrm sessions</h1>
 
+<%= link_to "New hrm session", new_hrm_session_path %>
+
 <table id="hrm_sessions" class="table">
   <thead>
     <tr>
         <td>ID</td>
         <td>User</td>
         <td>Time</td>
+        <td>Action</td>
     </tr>
   </thead>
   <tbody>
@@ -22,4 +25,5 @@
   </tbody>
 </table>
 
-<%= link_to "New hrm session", new_hrm_session_path %>
+<%= will_paginate @hrm_sessions %>
+

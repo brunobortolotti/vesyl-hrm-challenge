@@ -3,7 +3,9 @@ class HrmSessionsController < ApplicationController
 
   # GET /hrm_sessions
   def index
-    @hrm_sessions = HrmSession.includes(:user).order(created_at: :desc).limit(10)
+    @hrm_sessions = HrmSession.includes(:user)
+                              .paginate(page: params[:page], per_page: 15)
+                              .order(created_at: :desc)
   end
 
   # GET /hrm_sessions/1

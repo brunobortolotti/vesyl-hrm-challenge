@@ -11,6 +11,7 @@ gem 'concurrent-ruby', '1.3.4'
 gem "redis", "~> 4.0"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
+gem 'csv', '~> 3.3', '>= 3.3.3'
 
 # Use Sass to process CSS
 # gem "sassc-rails"

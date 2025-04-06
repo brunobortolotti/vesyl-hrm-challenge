@@ -1,0 +1,17 @@
+<%= form_with(model: hrm_session) do |form| %>
+  <% if hrm_session.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(hrm_session.errors.count, "error") %> prohibited this hrm_session from being saved:</h2>
+
+      <ul>
+        <% hrm_session.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

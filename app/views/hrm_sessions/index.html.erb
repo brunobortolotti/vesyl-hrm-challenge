@@ -1,0 +1,25 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Hrm sessions</h1>
+
+<table id="hrm_sessions" class="table">
+  <thead>
+    <tr>
+        <td>ID</td>
+        <td>User</td>
+        <td>Time</td>
+    </tr>
+  </thead>
+  <tbody>
+      <% @hrm_sessions.each do |hrm_session| %>
+        <tr>
+          <td><%= hrm_session.id %></td>
+          <td><%= hrm_session.user.username %></td>
+          <td><%= hrm_session.duration_in_seconds %></td>
+          <td><%= link_to "Show this hrm session", hrm_session %></td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
+
+<%= link_to "New hrm session", new_hrm_session_path %>

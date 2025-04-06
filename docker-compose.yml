@@ -1,0 +1,33 @@
+services:
+  app:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    command: [ "bin/start_dev.sh" ]
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - RAILS_ENV=development
+    ports:
+      - 3001:3000
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: dbpasswd
+      POSTGRES_USER: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379

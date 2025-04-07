@@ -14,6 +14,7 @@ gem "bootsnap", require: false
 gem 'csv', '~> 3.3', '>= 3.3.3'
 gem 'parallel', '~> 1.26', '>= 1.26.3'
 gem 'will_paginate', '~> 4.0', '>= 4.0.1'
+gem 'rubyzip'
 
 # Use Sass to process CSS
 # gem "sassc-rails"

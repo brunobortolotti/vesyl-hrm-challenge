@@ -32,3 +32,6 @@
 
 # Ignore Rubymine
 .idea
+
+# Ignore environment
+.env

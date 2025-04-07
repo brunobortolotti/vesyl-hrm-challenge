@@ -1,8 +1,28 @@
 
 namespace :db do
   desc 'Ingest Users'
+  task :download_file => :environment do
+    require 'zip'
+    puts 'Downloading external file. This can take a moment.'
+    download = URI.open(ENV['EXTERNAL_DATA_URL'])
+    IO.copy_stream(download, 'tmp/storage/data.zip')
+    puts 'File download completed... Unziping'
+
+    Zip::File.open('tmp/storage/data.zip') do |zip_file|
+      zip_file.each do |file|
+        file_path = "tmp/storage/#{file.name}"
+        zip_file.extract(file, file_path) unless File.exist?(file_path)
+      end
+    end
+    puts 'Unzip completed'
+  end
+
+  desc 'Ingest Users'
   task :ingest_users => :environment do
-    process_batches(file: 'tmp/storage/users.csv', batch_size: 1000, thread_limit: 10) do |index, chunk|
+    batch_size = ENV['INGEST_BATCH_SIZE']
+    thread_limit = ENV['INGEST_THREAD_LIMIT']
+
+    process_batches(file: 'tmp/storage/users.csv', batch_size:, thread_limit:) do |index, chunk|
       puts "Starting batch ##{index}"
       result = create_users(chunk)
       puts "Batch ##{index} finished. (#{result[:success_count]}) successes and (#{result[:failure_count]}) failures"
@@ -11,7 +31,10 @@ namespace :db do
 
   desc 'Ingest Sessions'
   task :ingest_sessions => :environment do
-    process_batches(file: 'tmp/storage/hrm_sessions.csv', batch_size: 1000, thread_limit: 10) do |index, chunk|
+    batch_size = ENV['INGEST_BATCH_SIZE']
+    thread_limit = ENV['INGEST_THREAD_LIMIT']
+
+    process_batches(file: 'tmp/storage/hrm_sessions.csv', batch_size:, thread_limit:) do |index, chunk|
       puts "Starting batch ##{index}"
       result = create_sessions(chunk)
       puts "Batch ##{index} finished. (#{result[:success_count]}) successes and (#{result[:failure_count]}) failures"
@@ -20,7 +43,10 @@ namespace :db do
 
   desc 'Ingest Data Points'
   task :ingest_data_points => :environment do
-    process_batches(file: 'tmp/storage/hrm_data_points.csv', batch_size: 1000, thread_limit: 10) do |index, chunk|
+    batch_size = ENV['INGEST_BATCH_SIZE']
+    thread_limit = ENV['INGEST_THREAD_LIMIT']
+
+    process_batches(file: 'tmp/storage/hrm_data_points.csv', batch_size:, thread_limit:) do |index, chunk|
       puts "Starting batch ##{index}"
       result = create_data_points(chunk)
       puts "Batch ##{index} finished. (#{result[:success_count]}) successes and (#{result[:failure_count]}) failures"
@@ -50,14 +76,14 @@ namespace :db do
 
     Thread.new do
       index = 0
-      CSV.open(file, headers: true).lazy.each_slice(batch_size) do |rows|
+      CSV.open(file, headers: true).lazy.each_slice(batch_size.to_i) do |rows|
         queue << [index, rows]
         index = index + 1
       end
       queue << -1
     end
 
-    Parallel.map(Proc.new { queue.shift }, in_processes: thread_limit) do |batch|
+    Parallel.map(Proc.new { queue.shift }, in_processes: thread_limit.to_i) do |batch|
       raise Parallel::Break if batch == -1
 
       if batch.blank?

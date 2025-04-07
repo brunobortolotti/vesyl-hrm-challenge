@@ -1,2 +1,76 @@
 <div id="<%= dom_id hrm_session %>">
+  <div>
+    <h3 class="mt-4">Session Details</h3>
+    <fieldset>
+      <div class="row">
+        <div class="col">
+          <div class="row attribute">
+            <label class="col-sm-4">Session ID</label>
+            <div class="col-sm-8"><%= hrm_session.id %></div>
+          </div>
+          <div class="row attribute">
+            <label class="col-sm-4">Username</label>
+            <div class="col-sm-8"><%= hrm_session.user.username %></div>
+          </div>
+          <div class="row attribute">
+            <label class="col-sm-4">Duration</label>
+            <div class="col-sm-8"><%= hrm_session.duration_in_seconds %></div>
+          </div>
+          <div class="row attribute">
+            <label class="col-sm-4">Maximum BPM</label>
+            <div class="col-sm-8"><%= hrm_session.max_beats_per_minute %></div>
+          </div>
+          <div class="row attribute">
+            <label class="col-sm-4">Minimum BPM</label>
+            <div class="col-sm-8"><%= hrm_session.min_beats_per_minute %></div>
+          </div>
+          <div class="row attribute">
+            <label class="col-sm-4">Average BPM</label>
+            <div class="col-sm-8"><%= hrm_session.avg_beats_per_minute %></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row attribute">
+            <label class="col-sm-4">HR Zone 1 Duration</label>
+            <div class="col-sm-8"><%= hrm_session.zone1_duration %></div>
+          </div>
+          <div class="row attribute">
+            <label class="col-sm-4">HR Zone 2 Duration</label>
+            <div class="col-sm-8"><%= hrm_session.zone2_duration %></div>
+          </div>
+          <div class="row attribute">
+            <label class="col-sm-4">HR Zone 3 Duration</label>
+            <div class="col-sm-8"><%= hrm_session.zone3_duration %></div>
+          </div>
+          <div class="row attribute">
+            <label class="col-sm-4">HR Zone 4 Duration</label>
+            <div class="col-sm-8"><%= hrm_session.zone4_duration %></div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <h3 class="mt-4">Data Points</h3>
+
+    <table id="hrm_data_points" class="table">
+      <thead>
+      <tr>
+        <td>Beats Per Minute</td>
+        <td>Reading Started At</td>
+        <td>Reading Ended At</td>
+        <td>Duration in Seconds</td>
+      </tr>
+      </thead>
+      <tbody>
+      <% hrm_session.hrm_data_points.order(reading_started_at: :asc).each do |hrm_data_point| %>
+        <tr>
+          <td><%= hrm_data_point.beats_per_minute %></td>
+          <td><%= hrm_data_point.reading_started_at %></td>
+          <td><%= hrm_data_point.reading_ended_at %></td>
+          <td><%= hrm_data_point.duration_in_seconds %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

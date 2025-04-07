@@ -2,14 +2,15 @@
 
 <h1>Hrm sessions</h1>
 
-<%= link_to "New hrm session", new_hrm_session_path %>
-
 <table id="hrm_sessions" class="table">
   <thead>
     <tr>
         <td>ID</td>
         <td>User</td>
         <td>Time</td>
+        <td>Min BPM</td>
+        <td>Max BPM</td>
+        <td>Avg BPM</td>
         <td>Action</td>
     </tr>
   </thead>
@@ -19,7 +20,10 @@
           <td><%= hrm_session.id %></td>
           <td><%= hrm_session.user.username %></td>
           <td><%= hrm_session.duration_in_seconds %></td>
-          <td><%= link_to "Show this hrm session", hrm_session %></td>
+          <td><%= (hrm_session.min_beats_per_minute || 0)%></td>
+          <td><%= (hrm_session.max_beats_per_minute || 0)%></td>
+          <td><%= (hrm_session.avg_beats_per_minute || 0).round(2) %></td>
+          <td><%= link_to "View Details", hrm_session %></td>
         </tr>
       <% end %>
   </tbody>

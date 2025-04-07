@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root "hrm_sessions#index"
+  root to: redirect('/hrm_sessions')
 
-  resources :hrm_sessions
+  resources :hrm_sessions, only: [:index, :show]
 end

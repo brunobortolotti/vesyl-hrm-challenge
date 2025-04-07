@@ -1,10 +1,8 @@
 <p style="color: green"><%= notice %></p>
 
+<div class="page-navigation">
+  <%= link_to "Back to HRM Sessions List", hrm_sessions_path, class: 'btn btn-secondary' %>
+</div>
+
 <%= render @hrm_session %>
 
-<div>
-  <%= link_to "Edit this hrm session", edit_hrm_session_path(@hrm_session) %> |
-  <%= link_to "Back to hrm sessions", hrm_sessions_path %>
-
-  <%= button_to "Destroy this hrm session", @hrm_session, method: :delete %>
-</div>

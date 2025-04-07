@@ -38,3 +38,20 @@ body {
     padding: 5px;
     margin: 0 5px;
 }
+
+.page-navigation {
+    margin-bottom: 15px;
+}
+
+fieldset {
+    background-color: #fff;
+    padding: 10px;
+}
+
+fieldset .attribute {
+    padding: 3px 0;
+}
+
+fieldset .attribute label {
+    font-weight: bold;
+}

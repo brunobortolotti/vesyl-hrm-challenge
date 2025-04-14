@@ -3,7 +3,12 @@ services:
     build: 
       context: ./
       dockerfile: Dockerfile
-    command: [ "bin/start_dev.sh" ]
+    command: > 
+      bash -c "echo \"Starting App Web Server\" &&
+               rm -rf /usr/src/app/tmp/pids &&
+               mkdir -p /usr/src/app/tmp/pids &&
+               bundle exec rails server -b 0.0.0.0 -p 3000 &&
+               echo \"Exit status: $?\" "
     stdin_open: true
     tty: true
     volumes:
